@@ -37,7 +37,9 @@ class Direction():
         self.range = range
 
     def calculate_steps(self, trip_length):
-
+        ''' Calculate number of steps needed to cover trip_length, taking into
+        account the current direction. '''
+        
         avg_xmove = abs(self.x_shift)/self.range
         avg_ymove = abs(self.y_shift)/self.range
 
@@ -60,7 +62,7 @@ class Direction():
 
 
     def move(self):
-
+        ''' Move according to direction (x-coordinate, y-coordinate)'''
         if random.random() < (abs(self.x_shift)/self.range):
             if self.x_shift > 0:
                 x_move = 1
@@ -80,6 +82,8 @@ class Direction():
         return [x_move, y_move]
 
     def change(self, shift):
+        ''' Mirror direction when bouncing off wall'''
+
         if shift[0] > 0 and self.x_shift < 0 or shift[0] < 0 and self.x_shift > 0:
             self.x_shift = -self.x_shift
         if shift[1] > 0 and self.y_shift < 0 or shift[1] < 0 and self.y_shift > 0:
@@ -88,6 +92,8 @@ class Direction():
     def __str__(self):
         return f'Direction is {self.x_shift}, {self.y_shift}'
 
+
+'''
 #directions=np.random.uniform(-np.pi,np.pi,size=N)
 #print(directions)
 print(360/24)
@@ -98,3 +104,4 @@ for i in range(N):
     degrees = math.degrees(radians)
     jumps = math.floor(degrees/15)
     print(radians, degrees, jumps)
+'''
