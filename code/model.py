@@ -63,7 +63,6 @@ class ContactModel(Model):
 
     def run(self, N):
         for i in range(N):
-            print(i)
             self.step()
 
         #distances = []
