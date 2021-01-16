@@ -2,6 +2,7 @@ import sys
 import os
 import csv
 import numpy as np
+import timeit
 
 from model import ContactModel
 from agent import Pedestrian
@@ -24,7 +25,7 @@ def save_data(model, N, i, exp, grid_size):
     iteration_dir = directory +  f'/{i}'
     os.mkdir(iteration_dir)
 
-    # Agent areas directory 
+    # Agent areas directory
     agent_areas_dir = iteration_dir + '/agent_areas'
     os.mkdir(agent_areas_dir)
 
@@ -50,8 +51,9 @@ def save_data(model, N, i, exp, grid_size):
 
 if __name__ == '__main__':
 
-    print('RUNNING')
+    start = timeit.default_timer()
 
+    print('RUNNING')
     for N in NUMBER_OF_AGENTS:
         for exp in EXPONENT:
             for grid_size in GRID_SIZES:
@@ -60,3 +62,7 @@ if __name__ == '__main__':
                     model = ContactModel(N, grid_size, grid_size, exp)
                     model.run(STEPS)
                     save_data(model, N, i, exp, grid_size)
+
+    stop = timeit.default_timer()
+    print()
+    print('Time: ', stop - start)
