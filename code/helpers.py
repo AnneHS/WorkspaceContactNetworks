@@ -6,7 +6,7 @@ import numpy as np
 def save_data(model, N, i, exp, grid_size):
 
     # Model directory
-    model_name = f'N{N}_exp{exp}_{grid_size}x{grid_size}'
+    model_name = f'testtest_N{N}_exp{exp}_{grid_size}x{grid_size}'
     directory = '../results/' + model_name
     if not os.path.isdir(directory):
          os.mkdir(directory)
