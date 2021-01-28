@@ -14,12 +14,10 @@ class Pedestrian(Agent):
     DIRECTION_DEGREES = 15
     #NR_OF_DIRECTIONS = 24
 
-    def __init__(self, unique_id, model, pos, exp, seed=None):
+    def __init__(self, unique_id, model, pos, exp):
         self.unique_id = unique_id
         self.model = model
         self.pos = pos
-        #self.xs =
-        #self.ys =
         self.area_traversed = np.zeros((model.width, model.height))
         self.traversable = True
         self.trip_lengths = powerlaw.Power_Law(xmin=7, parameters=[exp]) #1.5-2.0 #xmin 17?
@@ -30,6 +28,10 @@ class Pedestrian(Agent):
         self.on_trip = False
         self.current_direction = 0
         self.remaining_steps = 0
+
+        self.trip_info = []
+        self.start = None
+        self.end_point = None
 
 
 
@@ -50,10 +52,19 @@ class Pedestrian(Agent):
             jumps = math.floor(degrees/Pedestrian.DIRECTION_DEGREES)
             self.current_direction = self.directions.correlated(self.current_direction, jumps)
 
+            # Update eucledian distance -> trip info
+            eucledian_distance = math.sqrt((self.start[0] - self.pos[0])**2 + (self.start[1] - self.pos[1])**2)
+            self.trip_info[-1][1] += eucledian_distance
+
         # Trip length
         length_of_trip =  int(self.trip_lengths.generate_random(1)[0]) #generate_random ignores xmax
         self.remaining_steps = self.current_direction.calculate_steps(length_of_trip)
+        self.on_trip = True
 
+        # Saved to compare trip length (steps) and traveled euclidian distance
+        self.start = self.pos
+        traveled_distance = 0
+        self.trip_info.append([length_of_trip, traveled_distance])
 
 
     def contact(self):
@@ -122,6 +133,11 @@ class Pedestrian(Agent):
                 move = (self.pos[0] + bounce_shift[0], self.pos[1] + bounce_shift[1])
                 if self.check_if_traversable(move):
 
+                    # Update eucledian distance -> trip info
+                    euclidian_distance = math.sqrt((self.start[0] - self.pos[0])**2 + (self.start[1] - self.pos[1])**2)
+                    self.trip_info[-1][1] += euclidian_distance
+                    self.start = self.pos
+
                     # Bounce: move + new direction
                     new_position = move
                     self.model.grid.move_agent(self, new_position)
@@ -130,6 +146,9 @@ class Pedestrian(Agent):
 
                     break
 
+        # Keep track of area traversed
+        self.area_traversed[self.pos[0], self.pos[1]] = 1
+
     def step(self):
         self.move()
-        #self.contact()
+        self.contact()
