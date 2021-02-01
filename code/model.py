@@ -6,7 +6,7 @@ from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid, HexGrid
 from mesa.time import RandomActivation, BaseScheduler
 
-from agent2 import Pedestrian
+from agent import Pedestrian
 
 class ContactModel(Model):
     def __init__(self, N, height, width, exponent, steps, seed):

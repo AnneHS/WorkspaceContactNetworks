@@ -1,14 +1,14 @@
 import timeit
 
-from model2 import ContactModel
-from agent2 import Pedestrian
+from model import ContactModel
+from agent import Pedestrian
 from helpers import save_data, printProgressBar
 from multiprocessing import Pool, cpu_count
 # Params
-NUMBER_OF_AGENTS = [75]#[145] #145
+NUMBER_OF_AGENTS = [145]#[145] #145
 #ITERATIONS = 1 #5
 STEPS = 10000 #10000
-EXPONENT = [1.5, 1.6, 1.7, 1.8, 1.9. 2.0] #1.5, 1.6, 1.7, 1.8, 1.9, 2.0, #1.5, 1.6
+EXPONENT = [1.5, 1.6, 1.7, 1.8, 1.9, 2.0] #1.5, 1.6, 1.7, 1.8, 1.9, 2.0, #1.5, 1.6
 GRID_SIZES = [114, 139, 161]#, 161] # 8m^2, 12m^2, 16m^2
 
 def evaluate_mp(N, grid_size, exp):
