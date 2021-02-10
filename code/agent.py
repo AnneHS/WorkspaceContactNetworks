@@ -14,17 +14,18 @@ class Pedestrian(Agent):
     DIRECTION_DEGREES = 15
     #NR_OF_DIRECTIONS = 24
 
-    def __init__(self, unique_id, model, pos, exp, seed=None):
+    def __init__(self, unique_id, model, pos, exp, x_min, seed=None):
         self.unique_id = unique_id
         self.model = model
         self.pos = pos
-        #self.xs =
-        #self.ys =
+
         self.area_traversed = np.zeros((model.width, model.height))
         self.traversable = True
-        self.trip_lengths = powerlaw.Power_Law(xmin=7, parameters=[exp]) #1.5-2.0 #xmin 17?
+        self.trip_lengths = powerlaw.Power_Law(xmin=x_min, parameters=[exp]) #1.5-2.0 #xmin 17?
         self.direction_range=3
         self.directions = Directions(self.direction_range)
+        self.trip_lengths_covered = []
+        self.steps_covered = []
 
         self.area_traversed[self.pos[0], self.pos[1]] = 1
         self.on_trip = False
@@ -53,6 +54,9 @@ class Pedestrian(Agent):
         # Trip length
         length_of_trip =  int(self.trip_lengths.generate_random(1)[0]) #generate_random ignores xmax
         self.remaining_steps = self.current_direction.calculate_steps(length_of_trip)
+        self.model.trip_lengths.append(self.remaining_steps)
+        self.trip_lengths_covered.append(length_of_trip)
+        self.steps_covered.append(self.remaining_steps)
 
 
 

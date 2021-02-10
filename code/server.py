@@ -16,8 +16,9 @@ def agent_portrayal(agent):
 
     return portrayal
 
-grid = CanvasGrid(agent_portrayal, 4, 4, 500, 500)
-server = ModularServer(ContactModel, [grid], "Evacuation Model", {"N":1, "height":4,"width":4})
+grid = CanvasGrid(agent_portrayal, 114, 114,570, 570)
+#N, grid_size, grid_size, exp, STEPS, seed=8
+server = ModularServer(ContactModel, [grid], "Evacuation Model", {"N":145, "height":114,"width":114, "exponent":1.6, "steps": 1000, "seed":8})
 
 server.port = 8420 #8422 #default
 server.launch()

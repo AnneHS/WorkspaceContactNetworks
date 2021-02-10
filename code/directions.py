@@ -2,7 +2,6 @@ import numpy as np
 import random
 import math
 
-from numba import jit
 
 random.seed(8)
 
@@ -26,7 +25,6 @@ class Directions():
         for shift in shifts[-2:0:-1]:
             self.directions.append([shift, -self.range])
 
-    #@jit(nopython=True)
     def correlated(self, current_direction, i):
         dir = [current_direction.x_shift, current_direction.y_shift]
         index = (self.directions.index(dir) + i)%len(self.directions)
@@ -41,7 +39,6 @@ class Direction():
         self.y_shift = direction[1]
         self.range = range
 
-    #@jit(nopython=True)
     def calculate_steps(self, trip_length):
         ''' Calculate number of steps needed to cover trip_length, taking into
         account the current direction. '''
@@ -66,7 +63,6 @@ class Direction():
 
         return number_of_steps
 
-    #@jit(nopython=True)
     def move(self):
         ''' Move according to direction (x-coordinate, y-coordinate)'''
         if random.random() < (abs(self.x_shift)/self.range):
@@ -87,7 +83,6 @@ class Direction():
 
         return np.array([x_move, y_move])
 
-    #@jit(nopython=True)
     def change(self, shift):
         ''' Mirror direction when bouncing off wall'''
 

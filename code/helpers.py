@@ -3,11 +3,11 @@ import os
 import csv
 import numpy as np
 
-def save_data(model, N, i, exp, grid_size):
+def save_data(model, N, i, exp, grid_size, xmin):
 
     # Model directory
     model_name = f'N{N}_exp{exp}_{grid_size}x{grid_size}'
-    directory = '../results/' + model_name
+    directory = f'../results/xmin{xmin}/{model_name}'
     if not os.path.isdir(directory):
          os.mkdir(directory)
 
@@ -16,8 +16,8 @@ def save_data(model, N, i, exp, grid_size):
     os.mkdir(iteration_dir)
 
     # Agent areas directory
-    #agent_areas_dir = iteration_dir + '/agent_areas'
-    #os.mkdir(agent_areas_dir)
+    agent_areas_dir = iteration_dir + '/agent_trips'
+    os.mkdir(agent_areas_dir)
 
     # Save adjacency matrix
     matrix = np.asarray(model.adjacency_matrix)
@@ -36,10 +36,12 @@ def save_data(model, N, i, exp, grid_size):
     np.savetxt(iteration_dir + '/adjacency.csv', new_matrix, delimiter=";")
     np.savetxt(iteration_dir + '/x_locs.csv', model.x_locs, delimiter=";")
     np.savetxt(iteration_dir + '/y_locs.csv', model.y_locs, delimiter=";")
+    np.savetxt(iteration_dir + '/trip_lengths.csv', model.trip_lengths, delimiter=";")
 
     # Save area matrices
-    #for agent in model.schedule.agents:
-    #    np.savetxt(agent_areas_dir + f'/agent{agent.unique_id}.csv', agent.area_traversed, delimiter=";")
+    for agent in model.schedule.agents:
+        np.savetxt(agent_areas_dir + f'/agent{agent.unique_id}_trip_lengths.csv', agent.trip_lengths_covered, delimiter=";")
+        np.savetxt(agent_areas_dir + f'/agent{agent.unique_id}_steps.csv', agent.steps_covered, delimiter=";")
 
 def printProgressBar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
     """
